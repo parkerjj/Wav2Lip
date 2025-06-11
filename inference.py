@@ -279,9 +279,13 @@ def main():
 
     subprocess.check_call([
         "ffmpeg", "-y",
-        # "-vsync", "0", "-hwaccel", "cuda", "-hwaccel_output_format", "cuda",
+        "-vsync", "0", "-hwaccel", "cuda", "-hwaccel_output_format", "cuda",
         "-i", "temp/result.avi",
-        "-i", args.audio,
+        "-i", args.audio, 
+        "-c:v", "libx264",        # 使用x264编码器
+        "-c:a", "aac",            # 保证音频编码兼容
+        "-preset", "slow",        # 更慢 = 更高压缩效率
+        "-crf", "18",             # 控制码率，值越小越清晰（推荐17–23）
         # "-c:v", "h264_nvenc",
         args.outfile,
     ])
